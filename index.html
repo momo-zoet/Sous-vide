@@ -4,14 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>舒肥計算機</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Huninn&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#fff0ea;--card:#fffaf7;--ink:#4a231c;--sub:#8a5f55;--line:#f1d3c8;--acc:#d6402f;--onacc:#fff;--honey:#f0a23a;--plate:#ffe2d6;--warn:#fff3d6;--fh:"Huninn","jf-openhuninn","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1512;--card:#3a1f1b;--ink:#ffe9e1;--sub:#d1a99d;--line:#5a312b;--acc:#ff7a63;--onacc:#2a1512;--honey:#f5b550;--plate:#4d2924;--warn:#4a3520;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#2a1512;--card:#3a1f1b;--ink:#ffe9e1;--sub:#d1a99d;--line:#5a312b;--acc:#ff7a63;--onacc:#2a1512;--honey:#f5b550;--plate:#4d2924;--warn:#4a3520;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.6}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Color Emoji", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;line-height:1.6}
 .wrap{position:relative;max-width:960px;margin:0 auto}
 main{padding:28px 18px 48px;min-height:100vh}
 .nbtn{position:absolute;top:26px;right:18px;z-index:2;font:inherit;font-size:14px;cursor:pointer;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px}
@@ -120,7 +122,7 @@ var M=[
  {n:"軟體類",e:"🦑",d:"花枝、章魚",cuts:[
   {n:"花枝",full:"花枝、透抽、小卷",e:"🦑",kind:"min",opts:[["彈嫩",60,20,40,"花枝很容易過熟變得像橡膠，時間到就要起鍋。大隻或切厚塊的取上限。"]]},
   {n:"章魚",full:"章魚、小章魚",e:"🐙",kind:"long",opts:[["軟嫩",77,5,8,"冷凍過的章魚比較容易軟；新鮮或很大隻的取上限，小章魚可再少 1–2 小時。"]]}]},
- {n:"根莖蔬菜",e:"🥕",d:"胡蘿蔔、地瓜、馬憐薯",cuts:[
+ {n:"根莖蔬菜",e:"🥕",d:"胡蘿蔔、地瓜、馬鈴薯",cuts:[
   {n:"胡蘿蔔甜菜",full:"胡蘿蔔、甜菜（切 2 公分塊）",e:"🥕",kind:"min",tip:VT,opts:[["脆嫩",85,60,90,"保留一點咬勁，適合當配菜或拌沙拉。"],["軟嫩",85,120,180,"叉子可以輕易戳穿。"]]},
   {n:"地瓜南瓜",full:"地瓜、南瓜（切 2 公分塊）",e:"🍠",kind:"min",tip:VT,opts:[["鬆軟",90,30,60,"口感綿密，甜味比較明顯。"]]},
   {n:"馬鈴薯",full:"馬鈴薯（切 2 公分塊）",e:"🥔",kind:"min",tip:VT,opts:[["鬆軟",90,60,90,"叉子可以輕易戳穿，也可以直接壓成薯泥。"]]}]},
@@ -202,7 +204,6 @@ function noteLoad(){
   sv(pk(), isPublic ? "true" : "false");
   document.getElementById("ns").textContent = val.trim() ? "已儲存筆記！" : "已清除筆記。";
   
-  // 更新公開留言顯示
   var area = document.getElementById("pub_comments_container");
   if(area) area.innerHTML = renderPublicCommentsHtml(S.m.n);
  }
