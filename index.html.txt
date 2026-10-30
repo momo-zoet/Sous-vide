@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>舒肥計算機</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Huninn&display=swap">
+<style>
+:root{--bg:#fff0ea;--card:#fffaf7;--ink:#4a231c;--sub:#8a5f55;--line:#f1d3c8;--acc:#d6402f;--onacc:#fff;--honey:#f0a23a;--plate:#ffe2d6;--warn:#fff3d6;--fh:"Huninn","jf-openhuninn","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1512;--card:#3a1f1b;--ink:#ffe9e1;--sub:#d1a99d;--line:#5a312b;--acc:#ff7a63;--onacc:#2a1512;--honey:#f5b550;--plate:#4d2924;--warn:#4a3520;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#2a1512;--card:#3a1f1b;--ink:#ffe9e1;--sub:#d1a99d;--line:#5a312b;--acc:#ff7a63;--onacc:#2a1512;--honey:#f5b550;--plate:#4d2924;--warn:#4a3520;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.6}
+.wrap{position:relative;max-width:960px;margin:0 auto}
+main{padding:28px 18px 48px;min-height:100vh}
+.nbtn{position:absolute;top:26px;right:18px;z-index:2;font:inherit;font-size:14px;cursor:pointer;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px}
+.nbtn:hover{border-color:var(--acc)}
+h1,h2,.tile b,.big strong,.item b{font-family:var(--fh)}
+h1{font-size:32px;margin:0 0 4px;letter-spacing:.04em;padding-right:120px}
+h2{font-size:22px;margin:0;font-weight:400}
+h3{font-family:var(--fh);font-size:17px;font-weight:400;margin:22px 0 10px;color:var(--sub)}
+.lead{color:var(--sub);margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (min-width:600px){.grid{grid-template-columns:repeat(3,1fr);gap:18px}}
+@media (min-width:900px){.grid{grid-template-columns:repeat(4,1fr)}h1{font-size:40px}}
+.tile{font:inherit;color:inherit;cursor:pointer;background:var(--card);border:2px solid var(--line);border-radius:22px;padding:18px 10px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .12s,border-color .12s}
+.tile:hover{border-color:var(--acc)}
+.tile:active{transform:scale(.97)}
+.tile:focus-visible,.back:focus-visible,.chip:focus-visible,.nbtn:focus-visible,.go:focus-visible,.x:focus-visible,input:focus-visible{outline:3px solid var(--honey);outline-offset:2px}
+.tile b{font-size:18px;font-weight:400}
+.tile small{color:var(--sub);font-size:12.5px;text-align:center;margin-top:-6px}
+.ico{width:76px;height:76px;border-radius:50%;background:var(--plate);display:grid;place-items:center;font-size:40px;overflow:hidden;flex:none}
+.ico img{width:100%;height:100%;object-fit:cover}
+.ico.sm{width:52px;height:52px;font-size:28px}
+.bar{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-right:120px;min-height:40px}
+.back{font:inherit;cursor:pointer;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px}
+.res{display:grid;gap:4px}
+@media (min-width:820px){.res{grid-template-columns:5fr 6fr;gap:32px;align-items:start}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+.chip{font:inherit;cursor:pointer;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px}
+.chip[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:var(--onacc)}
+label,.lab{display:block;font-size:14px;color:var(--sub);margin:16px 0 6px}
+.lab:first-child{margin-top:0}
+.row{display:flex;gap:10px;align-items:center}
+input[type=range]{flex:1;accent-color:var(--acc)}
+input[type=number]{width:84px;font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:10px;padding:8px 10px}
+.out{border-radius:22px;background:var(--acc);color:var(--onacc);padding:22px 20px;margin-top:18px}
+@media (min-width:820px){.out{margin-top:0}}
+.big{display:flex;gap:30px;flex-wrap:wrap;align-items:baseline}
+.big span{display:block;font-size:13px;opacity:.9}
+.big strong{font-size:48px;line-height:1.1;font-weight:400;font-variant-numeric:tabular-nums}
+.big .t strong{font-size:32px}
+.note{margin:14px 0 0;font-size:14px}
+.tips{margin-top:16px;font-size:14px;color:var(--sub)}
+.warn{margin-top:14px;border-left:4px solid var(--honey);padding:8px 12px;font-size:13.5px;background:var(--warn);color:var(--ink);border-radius:0 12px 12px 0}
+.warn.hot{border-left-color:var(--acc)}
+.notes{margin-top:18px}
+textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 12px;resize:vertical}
+textarea:focus-visible{outline:3px solid var(--honey);outline-offset:2px}
+.notes small{display:block;margin-top:6px;color:var(--sub);font-size:12.5px}
+.item{display:flex;gap:8px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:8px 10px;margin-bottom:10px}
+.go{flex:1;min-width:0;display:flex;gap:12px;align-items:center;text-align:left;background:none;border:0;font:inherit;color:inherit;cursor:pointer;padding:2px}
+.go b{font-weight:400;font-size:16px}
+.go small{color:var(--sub);font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.go span{min-width:0}
+.x{font:inherit;font-size:13px;cursor:pointer;border:2px solid var(--line);background:none;color:var(--sub);border-radius:999px;padding:4px 10px;flex:none}
+.x.sure{border-color:var(--acc);color:var(--acc)}
+.empty{color:var(--sub);font-size:14px;margin:0 0 6px}
+
+/* 社群筆記卡片與可視性選擇器樣式 */
+.pub-section{margin-top:28px}
+.comment-card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start}
+.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:22px;flex:none}
+.comment-content{flex:1;min-width:0}
+.comment-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.comment-author{font-weight:bold;font-size:14px;color:var(--ink)}
+.comment-tag{font-size:12px;color:var(--sub);background:var(--plate);padding:2px 8px;border-radius:12px}
+.comment-text{font-size:14px;color:var(--ink);white-space:pre-wrap;word-break:break-word}
+.vis-selector{display:flex;gap:16px;margin:8px 0;font-size:14px;color:var(--sub)}
+.vis-selector label{display:flex;align-items:center;gap:6px;cursor:pointer;margin:0;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap"><button class="nbtn" id="nbtn">📒 筆記本</button><main id="app"></main></div>
+<script>
+var IMG={
+ "牛肉":"","豬肉":"","雞肉":"","鴨肉":"","羊肉":"","魚類":"","蝦貝類":"","軟體類":"","根莖蔬菜":"","蔬菜":"","水果":"","雞蛋":"",
+ "牛排":"","牛小排":"","豬里肌":"","豬五花":"","雞胸":"","雞腿":"","鴨胸":"","羊排":"","鮭魚":"","白身魚":"","蝦":"","干貝":"","花枝":"","章魚":"",
+ "胡蘿蔔甜菜":"","地瓜南瓜":"","馬鈴薯":"","花椰菜四季豆":"","玉米":"","木瓜":"","哈密瓜":"","奇異果":""
+};
+
+var BEEF_DONE=[["三分熟（粉紅偏紅）",54],["五分熟（粉紅）",57],["七分熟（微粉）",62],["全熟",68]];
+var VT="蔬菜切成大小一致，加少許油或奶油、鹽，真空或排氣密封。起鍋後可以煎或烤一下上色。";
+var FT="水果通常和糖漿或香料一起密封，主要是為了入味與改變口感。切塊大小會影響時間，建議第一次當成起點試做。";
+var M=[
+ {n:"牛肉",e:"🐄",d:"熟度可選",cuts:[
+  {n:"牛排",full:"肋眼、沙朗、菲力",e:"🥩",kind:"tender",k:12,x:60,done:BEEF_DONE},
+  {n:"牛小排",full:"牛小排、牛肋條、牛腱、牛腩",e:"🍖",kind:"long",opts:[["有嚼勁、多汁",57,24,48],["軟嫩易撕",74,12,24]]}]},
+ {n:"豬肉",e:"🐖",d:"一律熟透",cuts:[
+  {n:"豬里肌",full:"豬里肌、梅花、豬排",e:"🥓",kind:"tender",k:12,x:60,t:63},
+  {n:"豬五花",full:"豬五花、豬肋排",e:"🍖",kind:"long",rec:2,opts:[
+   ["彈牙可切片",63,24,36,"口感像厚切豬排，肉質緊實，適合切片或乾煎。"],
+   ["軟嫩帶彈性",68,24,48,"肉塊保持完整、好處理，適合再煎、炸或烤。"],
+   ["易撕軟嫩（新手推薦）",74,20,24,"軟嫩好入口，肉塊還能維持形狀。"],
+   ["入口即化",80,12,18,"傳統的爛口感，肉會自然散開。"]]}]},
+ {n:"雞肉",e:"🐓",d:"一律熟透",cuts:[
+  {n:"雞胸",full:"雞胸",e:"🍗",kind:"tender",k:12,x:60,t:65},
+  {n:"雞腿",full:"雞腿",e:"🍗",kind:"tender",k:12,x:120,t:74,min:120}]},
+ {n:"鴨肉",e:"🦆",d:"一律熟透",cuts:[
+  {n:"鴨胸",full:"鴨胸",e:"🦆",kind:"tender",k:12,x:60,t:63}]},
+ {n:"羊肉",e:"🐑",d:"一律熟透",cuts:[
+  {n:"羊排",full:"羊排、羊小排",e:"🍖",kind:"tender",k:12,x:60,t:63}]},
+ {n:"魚類",e:"🐟",d:"一律熟透",cuts:[
+  {n:"鮭魚",full:"鮭魚",e:"🐟",kind:"tender",b:10,k:6,x:20,t:60},
+  {n:"白身魚",full:"鱈魚、鱸魚、鯛魚",e:"🐠",kind:"tender",b:10,k:6,x:20,t:60}]},
+ {n:"蝦貝類",e:"🦐",d:"干貝可選嫩口",cuts:[
+  {n:"蝦",full:"草蝦、白蝦",e:"🦐",kind:"tender",b:10,k:3,x:15,t:60,t0:2},
+  {n:"干貝",full:"干貝、扇貝",e:"🐚",kind:"tender",b:1,k:4,x:10,done:[["嫩口、半透明",50],["熟透",60]],lw:"50 °C 的干貝是半熟的嫩口，只適合非常新鮮、冷藏保存良好的干貝，冷凍過的建議加 10 分鐘左右；孕婦、長者與幼童請改選熟透。"}]},
+ {n:"軟體類",e:"🦑",d:"花枝、章魚",cuts:[
+  {n:"花枝",full:"花枝、透抽、小卷",e:"🦑",kind:"min",opts:[["彈嫩",60,20,40,"花枝很容易過熟變得像橡膠，時間到就要起鍋。大隻或切厚塊的取上限。"]]},
+  {n:"章魚",full:"章魚、小章魚",e:"🐙",kind:"long",opts:[["軟嫩",77,5,8,"冷凍過的章魚比較容易軟；新鮮或很大隻的取上限，小章魚可再少 1–2 小時。"]]}]},
+ {n:"根莖蔬菜",e:"🥕",d:"胡蘿蔔、地瓜、馬鈴薯",cuts:[
+  {n:"胡蘿蔔甜菜",full:"胡蘿蔔、甜菜（切 2 公分塊）",e:"🥕",kind:"min",tip:VT,opts:[["脆嫩",85,60,90,"保留一點咬勁，適合當配菜或拌沙拉。"],["軟嫩",85,120,180,"叉子可以輕易戳穿。"]]},
+  {n:"地瓜南瓜",full:"地瓜、南瓜（切 2 公分塊）",e:"🍠",kind:"min",tip:VT,opts:[["鬆軟",90,30,60,"口感綿密，甜味比較明顯。"]]},
+  {n:"馬鈴薯",full:"馬鈴薯（切 2 公分塊）",e:"🥔",kind:"min",tip:VT,opts:[["鬆軟",90,60,90,"叉子可以輕易戳穿，也可以直接壓成薯泥。"]]}]},
+ {n:"蔬菜",e:"🥦",d:"花椰菜、四季豆、玉米",cuts:[
+  {n:"花椰菜四季豆",full:"花椰菜、四季豆、蘆筍",e:"🥦",kind:"min",tip:VT,opts:[["脆嫩",85,20,30,"保留清脆口感，顏色比較亮。"],["軟嫩",85,45,60,"口感較軟，顏色會稍微變暗。"]]},
+  {n:"玉米",full:"玉米",e:"🌽",kind:"min",tip:VT,opts:[["甜脆",85,30,45,"可以連同奶油一起密封，起鍋後再烤或煎上色。"]]}]},
+ {n:"水果",e:"🍈",d:"木瓜、哈密瓜、奇異果",cuts:[
+  {n:"木瓜",full:"木瓜",e:"🧡",kind:"min",tip:FT,opts:[["香甜軟嫩",64,45,60,"參考一份商用食譜表，切塊大小請自行調整。"]]},
+  {n:"哈密瓜",full:"哈密瓜",e:"🍈",kind:"min",tip:FT,opts:[["清甜多汁",65,20,30,"參考一份商用食譜表，切塊大小請自行調整。"]]},
+  {n:"奇異果",full:"奇異果",e:"🥝",kind:"min",tip:FT,opts:[["酸甜軟嫩",80,20,30,"參考一份商用食譜表，切塊大小請自行調整。"]]}]},
+ {n:"雞蛋",e:"🥚",d:"溫泉蛋、糖心蛋、全熟蛋",cuts:[
+  {n:"雞蛋",full:"雞蛋",e:"🥚",kind:"egg",opts:[
+   ["溫泉蛋",63,45,60,"蛋白柔嫩半凝固、蛋黃濃稠流動。冰箱取出的蛋用上限時間，室溫蛋用下限。",1],
+   ["糖心蛋",75,12,15,"蛋白完全凝固、蛋黃流心。12 分鐘偏流動，15 分鐘偏濃稠。蛋從冰箱直接取出，時間到後泡冰水。",1],
+   ["全熟蛋",74,45,60,"蛋白與蛋黃都完全凝固，蛋黃粉嫩不乾澀。"]]}]}
+];
+
+// 預設匿名角色與預設公開社群筆記
+var ANONYMOUS_USERS = [
+ { name: "匿名倉鼠", emoji: "🐹", bg: "#ffe3b3" },
+ { name: "匿名兔子", emoji: "🐰", bg: "#ffd3e2" },
+ { name: "匿名河狸", emoji: "🦫", bg: "#e2c9b1" },
+ { name: "匿名蘋果", emoji: "🍎", bg: "#ffccd1" },
+ { name: "匿名芭樂", emoji: "🍏", bg: "#d2f5d3" },
+ { name: "匿名芒果", emoji: "🥭", bg: "#ffe5b4" },
+ { name: "匿名酪梨", emoji: "🥑", bg: "#dbeeb2" },
+ { name: "匿名西洋梨", emoji: "🍐", bg: "#eaf2bb" }
+];
+
+var SEED_PUBLIC_NOTES = [
+ { m: "牛肉", c: "牛排", tag: "五分熟", user: ANONYMOUS_USERS[0], text: "57度熟成肋眼2小時，出來靜置一下表面大火煎30秒，超爆汁！" },
+ { m: "牛肉", c: "牛小排", tag: "軟嫩易撕", user: ANONYMOUS_USERS[1], text: "帶骨牛小排74度跑24小時，軟爛到骨頭可以直接抽出來！" },
+ { m: "豬肉", c: "豬五花", tag: "入口即化", user: ANONYMOUS_USERS[2], text: "做東坡肉先舒肥80度14小時，拿出來再稍微滷一下超級入味。 " },
+ { m: "雞肉", c: "雞胸", tag: "65 °C", user: ANONYMOUS_USERS[3], text: "65度跑1小時剛剛好，完全不柴，加點橄欖油和黑胡椒超讚。" },
+ { m: "雞蛋", c: "雞蛋", tag: "溫泉蛋", user: ANONYMOUS_USERS[4], text: "63度50分鐘淋上鰹魚醬油和海苔絲，跟外面日式店家做的一模一樣！" }
+];
+
+var S={v:"meat",m:null,c:null,di:0,t:2.5,from:null};
+var app=document.getElementById("app");
+
+function ld(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function sv(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
+function rm(k){try{localStorage.removeItem(k)}catch(e){}}
+
+// 獲取本機發布身份，若無則隨機給予一個並固定
+function getMyProfile(){
+ var p = ld("sv_user_profile");
+ if(p){try{return JSON.parse(p)}catch(e){}}
+ var rand = ANONYMOUS_USERS[Math.floor(Math.random()*ANONYMOUS_USERS.length)];
+ sv("sv_user_profile", JSON.stringify(rand));
+ return rand;
+}
+
+function hist(){try{var h=JSON.parse(ld("sv_hist")||"[]");return Array.isArray(h)?h:[]}catch(e){return[]}}
+function saveLast(){var h=hist().filter(function(x){return !(x.m===S.m.n&&x.c===S.c.n&&x.di===S.di)});h.unshift({m:S.m.n,c:S.c.n,di:S.di,t:S.t});sv("sv_hist",JSON.stringify(h.slice(0,10)))}
+function nk(){return "sv_note:"+S.m.n+"/"+S.c.n+"/"+S.di}
+function pk(){return "sv_pub:"+S.m.n+"/"+S.c.n+"/"+S.di}
+
+function noteLoad(){
+ var ta=document.getElementById("nb");if(!ta)return;
+ var o=S.c.done||S.c.opts,l=o&&o.length>1?"（"+o[S.di][0]+"）":"";
+ document.getElementById("nl").textContent="我的筆記"+l;
+ 
+ ta.value=ld(nk())||"";
+ var isPub = ld(pk()) === "true";
+ var radPub = document.getElementById("vis_pub");
+ var radPri = document.getElementById("vis_pri");
+ if(radPub && radPri){
+  radPub.checked = isPub;
+  radPri.checked = !isPub;
+ }
+ 
+ document.getElementById("ns").textContent="設定為公開的筆記，會以隨機匿名暱稱顯示在分類區讓大家參考。";
+ 
+ function saveNoteState(){
+  var val = ta.value;
+  var isPublic = document.getElementById("vis_pub").checked;
+  sv(nk(), val);
+  sv(pk(), isPublic ? "true" : "false");
+  document.getElementById("ns").textContent = val.trim() ? "已儲存筆記！" : "已清除筆記。";
+ }
+ 
+ ta.oninput = saveNoteState;
+ if(radPub) radPub.onchange = saveNoteState;
+ if(radPri) radPri.onchange = saveNoteState;
+}
+
+function allNotes(){
+ var r=[];
+ try{
+  for(var i=0;i<localStorage.length;i++){
+   var k=localStorage.key(i);
+   if(k.indexOf("sv_note:")===0){
+    var v=localStorage.getItem(k);
+    if(v&&v.trim()){
+     var p=k.slice(8).split("/");
+     var isPub = localStorage.getItem("sv_pub:"+p[0]+"/"+p[1]+"/"+p[2]) === "true";
+     r.push({k:k,m:p[0],c:p[1],di:+p[2]||0,v:v,isPub:isPub});
+    }
+   }
+  }
+ }catch(e){}
+ return r;
+}
+
+// 取得某大類別（如牛肉）下的所有公開筆記（包含內建 + 使用者公開）
+function getCategoryPublicNotes(catName){
+ var list = SEED_PUBLIC_NOTES.filter(function(x){return x.m === catName;});
+ var myProfile = getMyProfile();
+ allNotes().forEach(function(n){
+  if(n.m === catName && n.isPub){
+   var f = find(n.m, n.c);
+   var tag = f ? optLabel(f.c, n.di) : "";
+   list.unshift({
+    m: n.m,
+    c: n.c,
+    tag: tag || "心得分享",
+    user: myProfile,
+    text: n.v
+   });
+  }
+ });
+ return list;
+}
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function ico(key,e,cls){var s=IMG[key];return '<div class="ico '+(cls||"")+'">'+(s?'<img src="'+s+'" alt="">':e)+'</div>'}
+function fmt(m){if(m<60)return m+" 分鐘";var h=Math.floor(m/60),r=m%60;return h+" 小時"+(r?" "+r+" 分":"")}
+function find(mn,cn){var m=M.filter(function(x){return x.n===mn})[0],c=m&&m.cuts.filter(function(x){return x.n===cn})[0];return c?{m:m,c:c}:null}
+function title(m,c){return m.n===c.n?m.n:m.n+"・"+c.n}
+function optLabel(c,di){var o=c.done||c.opts;return o&&o.length>1&&o[di]?o[di][0]:""}
+function go(v){S.v=v;render();window.scrollTo(0,0)}
+function pick(c){S.from=null;S.c=c;S.di=c.rec||0;S.t=c.t0||2.5;go("res")}
+
+document.getElementById("nbtn").onclick=function(){S.from=null;go("book")};
+
+function render(){
+ document.getElementById("nbtn").style.display=S.v==="book"?"none":"";
+ if(S.v==="meat"){
+  app.innerHTML='<h1>舒肥計算機</h1><p class="lead">今天想煮什麼？</p><div class="grid">'+
+   M.map(function(m,i){return '<button class="tile" data-m="'+i+'">'+ico(m.n,m.e)+'<b>'+m.n+'</b><small>'+m.d+'</small></button>'}).join("")+'</div>';
+  app.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){S.from=null;S.m=M[b.dataset.m];if(S.m.cuts.length===1)pick(S.m.cuts[0]);else go("cut")}});
+ }else if(S.v==="cut"){
+  var pubNotes = getCategoryPublicNotes(S.m.n);
+  var pubHtml = '';
+  if(pubNotes.length > 0){
+   pubHtml = '<div class="pub-section"><h3>💬 大家對【'+esc(S.m.n)+'】的筆記與評論</h3>' +
+    pubNotes.map(function(item){
+     return '<div class="comment-card">' +
+      '<div class="avatar" style="background:'+item.user.bg+'">'+item.user.emoji+'</div>' +
+      '<div class="comment-content">' +
+       '<div class="comment-header">' +
+        '<span class="comment-author">'+esc(item.user.name)+'</span>' +
+        '<span class="comment-tag">'+esc(item.c)+(item.tag?'・'+esc(item.tag):'')+'</span>' +
+       '</div>' +
+       '<div class="comment-text">'+esc(item.text)+'</div>' +
+      '</div>' +
+     '</div>';
+    }).join("") + '</div>';
+  }
+
+  app.innerHTML='<div class="bar"><button class="back" id="bk">返回</button><h2>'+S.m.n+'，選部位</h2></div><div class="grid">'+
+   S.m.cuts.map(function(c,i){return '<button class="tile" data-c="'+i+'">'+ico(c.n,c.e)+'<b>'+c.n+'</b><small>'+c.full+'</small></button>'}).join("")+'</div>' + pubHtml;
+  
+  document.getElementById("bk").onclick=function(){go("meat")};
+  app.querySelectorAll("[data-c]").forEach(function(b){b.onclick=function(){pick(S.m.cuts[b.dataset.c])}});
+ }else if(S.v==="book"){bookView()}
+ else{resView()}
+}
+
+function rowHtml(it,i,p){return '<div class="item"><button class="go" data-g="'+p+i+'">'+ico(it.f.c.n,it.f.c.e,"sm")+'<span><b>'+esc(title(it.f.m,it.f.c))+(it.l?'（'+esc(it.l)+'）':'')+'</b>'+(it.p?'<small>'+esc(it.p)+'</small>':'')+'</span></button><button class="x" data-x="'+p+i+'">'+(p==="n"?"刪除筆記":"移除")+'</button></div>'}
+
+function bookView(){
+ var H=[],N=[];
+ hist().slice(0,5).forEach(function(x){var f=find(x.m,x.c);if(f)H.push({f:f,di:x.di,t:x.t,l:optLabel(f.c,x.di),k:x})});
+ allNotes().forEach(function(n){
+  var f=find(n.m,n.c);if(!f)return;
+  var t=null;
+  hist().forEach(function(x){if(x.m===n.m&&x.c===n.c&&x.di===n.di&&!t)t=x.t});
+  var line=n.v.trim().split("\n")[0];
+  var tag = n.isPub ? " [🌐公開]" : " [🔒私人]";
+  N.push({f:f,di:n.di,t:t,l:optLabel(f.c,n.di),p:(line.length>35?line.slice(0,35)+"…":line)+tag,k:n.k,pk:"sv_pub:"+n.m+"/"+n.c+"/"+n.di});
+ });
+ var h='<div class="bar"><button class="back" id="bk">返回</button><h2>筆記本</h2></div>'+
+  '<h3>最近看過的</h3>'+(H.length?H.map(function(it,i){return rowHtml(it,i,"h")}).join(""):'<p class="empty">還沒有紀錄。選一個食材看看，就會出現在這裡。</p>')+
+  '<h3>我的筆記</h3>'+(N.length?N.map(function(it,i){return rowHtml(it,i,"n")}).join(""):'<p class="empty">還沒有筆記。在食材結果頁底下寫下口感，就會集中在這裡。</p>')+
+  '<p class="tips">記錄與筆記只存在這台裝置的瀏覽器裡，換裝置或清除瀏覽器資料就會不見。</p>';
+ app.innerHTML=h;
+ document.getElementById("bk").onclick=function(){go("meat")};
+ function open(it){S.m=it.f.m;S.c=it.f.c;S.di=it.di;S.t=it.t||it.f.c.t0||2.5;S.from="book";go("res")}
+ app.querySelectorAll("[data-g]").forEach(function(b){var p=b.dataset.g[0],i=+b.dataset.g.slice(1);b.onclick=function(){open((p==="h"?H:N)[i])}});
+ app.querySelectorAll("[data-x]").forEach(function(b){var p=b.dataset.x[0],i=+b.dataset.x.slice(1);b.onclick=function(){
+  if(!b.dataset.sure){b.dataset.sure=1;b.classList.add("sure");b.textContent="確定刪除？";return}
+  if(p==="n"){rm(N[i].k);rm(N[i].pk);}else{var x=H[i].k;sv("sv_hist",JSON.stringify(hist().filter(function(y){return !(y.m===x.m&&y.c===x.c&&y.di===x.di)})))}
+  bookView()}});
+}
+
+function resView(){
+ var c=S.c,h='<div class="bar"><button class="back" id="bk">返回</button>'+ico(c.n,c.e,"sm")+'<h2>'+(c.kind==="egg"?"雞蛋":S.m.n+"・"+c.n)+'</h2></div><div class="res"><div class="ctrl">';
+ var choices=c.done||(c.opts&&c.opts.length>1?c.opts:null);
+ if(choices){h+='<div class="lab">'+(c.done?"想要的熟度":c.kind==="egg"?"想要的蛋":"想要的口感")+'</div><div class="chips">'+choices.map(function(o,i){return '<button class="chip" data-d="'+i+'" aria-pressed="'+(i===S.di)+'">'+o[0]+'</button>'}).join("")+'</div>'}
+ if(c.kind==="tender"){h+='<label for="th">厚度（公分，取最厚處）</label><div class="row"><input type="range" id="thR" min="0.5" max="8" step="0.5"><input type="number" id="th" min="0.5" max="10" step="0.5"></div>'}
+ h+='</div><div class="outcol"><div class="out" aria-live="polite"><div class="big"><div><span>水溫</span><strong id="tp"></strong></div><div class="t"><span>時間</span><strong id="tm"></strong></div></div><p class="note" id="nt"></p></div><div id="ex"></div>'+
+ '<p class="tips">'+(c.tip?c.tip:c.kind==="egg"?'蛋先洗淨，直接連殼放入水中；時間到後泡冰水降溫，比較好剝。':'肉先擦乾並真空或排氣密封，水位淹過肉。起鍋後擦乾，用大火快煎或噴槍每面 30–60 秒上色。')+'</p>'+
+ '<div class="warn">數值是常見的參考值，不是食安保證。請使用新鮮、冷藏保存良好的食材，並確實達到建議時間；孕婦、長者與幼童建議選全熟或較高溫度。</div>'+
+ '<div class="notes"><label for="nb" id="nl">我的筆記</label><textarea id="nb" rows="4" placeholder="例如：74°C 煮 22 小時，偏軟，下次少 2 小時"></textarea>'+
+ '<div class="vis-selector">'+
+ '  <label><input type="radio" name="vis" id="vis_pri" value="private" checked> 🔒 僅自己可見（私人）</label>'+
+ '  <label><input type="radio" name="vis" id="vis_pub" value="public"> 🌐 公開到分類列表（匿名）</label>'+
+ '</div>'+
+ '<small id="ns"></small></div></div></div>';
+ app.innerHTML=h;
+ document.getElementById("bk").onclick=function(){if(S.from==="book"){S.from=null;go("book")}else go(S.m.cuts.length===1?"meat":"cut")};
+ app.querySelectorAll("[data-d]").forEach(function(b){b.onclick=function(){S.di=+b.dataset.d;app.querySelectorAll("[data-d]").forEach(function(x){x.setAttribute("aria-pressed",x===b)});calc()}});
+ if(c.kind==="tender"){
+  var r=document.getElementById("thR"),n=document.getElementById("th");r.value=n.value=S.t;
+  r.oninput=function(){n.value=this.value;S.t=+this.value;calc()};
+  n.oninput=function(){var v=parseFloat(this.value);if(v>0){S.t=v;r.value=Math.min(v,8);calc()}};
+ }
+ calc();
+}
+
+function calc(){
+ var c=S.c,tp,tm,nt,ex="";
+ if(c.kind==="long"){var o=c.opts[S.di]||c.opts[0];tp=o[1];tm=o[2]+"–"+o[3]+" 小時";nt=o[4]||"靠長時間分解筋膜，時間與厚度關係不大。"}
+ else if(c.kind==="egg"||c.kind==="min"){
+  var e=c.opts[S.di]||c.opts[0];tp=e[1];tm=e[2]+"–"+e[3]+" 分鐘";nt=e[4];
+  if(c.kind==="egg"&&e[5])ex='<div class="warn hot">這個熟度的蛋黃或蛋白沒有完全凝固，不屬於完全熟透。請選用新鮮、冷藏保存且蛋殼乾淨的蛋；孕婦、長者與幼童請改選全熟蛋。</div>';
+ }
+ else{
+  var t=S.t||2.5,mn=Math.round(((c.b||20)+c.k*t*t)/5)*5;if(c.min&&mn<c.min)mn=c.min;
+  tp=c.done?c.done[S.di][1]:c.t;tm=fmt(mn)+" – "+fmt(mn+c.x);
+  nt="下限是中心熱透的時間，超過上限口感會變軟爛。厚度 "+t+" 公分。";
+  if(c.done&&tp<60)ex='<div class="warn hot">'+tp+' °C 低於 60 °C，不屬於完全殺菌。'+(c.lw||'只建議用在整塊新鮮牛排，不適用於絞肉、組合肉或扎針嫩化過的肉，且孕婦、長者與幼童請改選七分熟以上。')+'</div>';
+  else if(!c.done)ex='<div class="warn">'+S.m.n+'的舒肥一律以熟透為準，所以不提供生熟度選項。</div>';
+ }
+ document.getElementById("tp").textContent=tp+" °C";
+ document.getElementById("tm").textContent=tm;
+ document.getElementById("nt").textContent=nt;
+ document.getElementById("ex").innerHTML=ex;
+ saveLast();noteLoad();
+}
+render();
+</script>
+</body>
+</html>
