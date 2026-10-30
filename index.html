@@ -120,7 +120,7 @@ var M=[
  {n:"軟體類",e:"🦑",d:"花枝、章魚",cuts:[
   {n:"花枝",full:"花枝、透抽、小卷",e:"🦑",kind:"min",opts:[["彈嫩",60,20,40,"花枝很容易過熟變得像橡膠，時間到就要起鍋。大隻或切厚塊的取上限。"]]},
   {n:"章魚",full:"章魚、小章魚",e:"🐙",kind:"long",opts:[["軟嫩",77,5,8,"冷凍過的章魚比較容易軟；新鮮或很大隻的取上限，小章魚可再少 1–2 小時。"]]}]},
- {n:"根莖蔬菜",e:"🥕",d:"胡蘿蔔、地瓜、馬鈴薯",cuts:[
+ {n:"根莖蔬菜",e:"🥕",d:"胡蘿蔔、地瓜、馬憐薯",cuts:[
   {n:"胡蘿蔔甜菜",full:"胡蘿蔔、甜菜（切 2 公分塊）",e:"🥕",kind:"min",tip:VT,opts:[["脆嫩",85,60,90,"保留一點咬勁，適合當配菜或拌沙拉。"],["軟嫩",85,120,180,"叉子可以輕易戳穿。"]]},
   {n:"地瓜南瓜",full:"地瓜、南瓜（切 2 公分塊）",e:"🍠",kind:"min",tip:VT,opts:[["鬆軟",90,30,60,"口感綿密，甜味比較明顯。"]]},
   {n:"馬鈴薯",full:"馬鈴薯（切 2 公分塊）",e:"🥔",kind:"min",tip:VT,opts:[["鬆軟",90,60,90,"叉子可以輕易戳穿，也可以直接壓成薯泥。"]]}]},
@@ -138,7 +138,6 @@ var M=[
    ["全熟蛋",74,45,60,"蛋白與蛋黃都完全凝固，蛋黃粉嫩不乾澀。"]]}]}
 ];
 
-// 預設匿名角色與預設公開社群筆記
 var ANONYMOUS_USERS = [
  { name: "匿名倉鼠", emoji: "🐹", bg: "#ffe3b3" },
  { name: "匿名兔子", emoji: "🐰", bg: "#ffd3e2" },
@@ -153,8 +152,10 @@ var ANONYMOUS_USERS = [
 var SEED_PUBLIC_NOTES = [
  { m: "牛肉", c: "牛排", tag: "五分熟", user: ANONYMOUS_USERS[0], text: "57度熟成肋眼2小時，出來靜置一下表面大火煎30秒，超爆汁！" },
  { m: "牛肉", c: "牛小排", tag: "軟嫩易撕", user: ANONYMOUS_USERS[1], text: "帶骨牛小排74度跑24小時，軟爛到骨頭可以直接抽出來！" },
- { m: "豬肉", c: "豬五花", tag: "入口即化", user: ANONYMOUS_USERS[2], text: "做東坡肉先舒肥80度14小時，拿出來再稍微滷一下超級入味。 " },
+ { m: "豬肉", c: "豬五花", tag: "入口即化", user: ANONYMOUS_USERS[2], text: "做東坡肉先舒肥80度14小時，拿出來再稍微滷一下超級入味。" },
  { m: "雞肉", c: "雞胸", tag: "65 °C", user: ANONYMOUS_USERS[3], text: "65度跑1小時剛剛好，完全不柴，加點橄欖油和黑胡椒超讚。" },
+ { m: "鴨肉", c: "鴨胸", tag: "63 °C", user: ANONYMOUS_USERS[6], text: "鴨胸63度舒肥1.5小時，起鍋煎皮香脆肉嫩多汁！" },
+ { m: "羊肉", c: "羊排", tag: "63 °C", user: ANONYMOUS_USERS[7], text: "羊排加點迷迭香舒肥，完全沒有羊騷味，超級好吃。" },
  { m: "雞蛋", c: "雞蛋", tag: "溫泉蛋", user: ANONYMOUS_USERS[4], text: "63度50分鐘淋上鰹魚醬油和海苔絲，跟外面日式店家做的一模一樣！" }
 ];
 
@@ -165,7 +166,6 @@ function ld(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function sv(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
 function rm(k){try{localStorage.removeItem(k)}catch(e){}}
 
-// 獲取本機發布身份，若無則隨機給予一個並固定
 function getMyProfile(){
  var p = ld("sv_user_profile");
  if(p){try{return JSON.parse(p)}catch(e){}}
@@ -193,7 +193,7 @@ function noteLoad(){
   radPri.checked = !isPub;
  }
  
- document.getElementById("ns").textContent="設定為公開的筆記，會以隨機匿名暱稱顯示在分類區讓大家參考。";
+ document.getElementById("ns").textContent="設定為公開的筆記，會以隨機匿名暱稱顯示在社群評論區讓大家參考。";
  
  function saveNoteState(){
   var val = ta.value;
@@ -201,6 +201,10 @@ function noteLoad(){
   sv(nk(), val);
   sv(pk(), isPublic ? "true" : "false");
   document.getElementById("ns").textContent = val.trim() ? "已儲存筆記！" : "已清除筆記。";
+  
+  // 更新公開留言顯示
+  var area = document.getElementById("pub_comments_container");
+  if(area) area.innerHTML = renderPublicCommentsHtml(S.m.n);
  }
  
  ta.oninput = saveNoteState;
@@ -226,7 +230,6 @@ function allNotes(){
  return r;
 }
 
-// 取得某大類別（如牛肉）下的所有公開筆記（包含內建 + 使用者公開）
 function getCategoryPublicNotes(catName){
  var list = SEED_PUBLIC_NOTES.filter(function(x){return x.m === catName;});
  var myProfile = getMyProfile();
@@ -246,6 +249,24 @@ function getCategoryPublicNotes(catName){
  return list;
 }
 
+function renderPublicCommentsHtml(catName){
+ var pubNotes = getCategoryPublicNotes(catName);
+ if(pubNotes.length === 0) return '';
+ return '<div class="pub-section"><h3>💬 大家對【'+esc(catName)+'】的筆記與評論</h3>' +
+  pubNotes.map(function(item){
+   return '<div class="comment-card">' +
+    '<div class="avatar" style="background:'+item.user.bg+'">'+item.user.emoji+'</div>' +
+    '<div class="comment-content">' +
+     '<div class="comment-header">' +
+      '<span class="comment-author">'+esc(item.user.name)+'</span>' +
+      '<span class="comment-tag">'+esc(item.c)+(item.tag?'・'+esc(item.tag):'')+'</span>' +
+     '</div>' +
+     '<div class="comment-text">'+esc(item.text)+'</div>' +
+    '</div>' +
+   '</div>';
+  }).join("") + '</div>';
+}
+
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 function ico(key,e,cls){var s=IMG[key];return '<div class="ico '+(cls||"")+'">'+(s?'<img src="'+s+'" alt="">':e)+'</div>'}
 function fmt(m){if(m<60)return m+" 分鐘";var h=Math.floor(m/60),r=m%60;return h+" 小時"+(r?" "+r+" 分":"")}
@@ -262,26 +283,14 @@ function render(){
  if(S.v==="meat"){
   app.innerHTML='<h1>舒肥計算機</h1><p class="lead">今天想煮什麼？</p><div class="grid">'+
    M.map(function(m,i){return '<button class="tile" data-m="'+i+'">'+ico(m.n,m.e)+'<b>'+m.n+'</b><small>'+m.d+'</small></button>'}).join("")+'</div>';
-  app.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){S.from=null;S.m=M[b.dataset.m];if(S.m.cuts.length===1)pick(S.m.cuts[0]);else go("cut")}});
+  app.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){
+   S.from=null;
+   S.m=M[b.dataset.m];
+   if(S.m.cuts.length===1) pick(S.m.cuts[0]);
+   else go("cut");
+  }});
  }else if(S.v==="cut"){
-  var pubNotes = getCategoryPublicNotes(S.m.n);
-  var pubHtml = '';
-  if(pubNotes.length > 0){
-   pubHtml = '<div class="pub-section"><h3>💬 大家對【'+esc(S.m.n)+'】的筆記與評論</h3>' +
-    pubNotes.map(function(item){
-     return '<div class="comment-card">' +
-      '<div class="avatar" style="background:'+item.user.bg+'">'+item.user.emoji+'</div>' +
-      '<div class="comment-content">' +
-       '<div class="comment-header">' +
-        '<span class="comment-author">'+esc(item.user.name)+'</span>' +
-        '<span class="comment-tag">'+esc(item.c)+(item.tag?'・'+esc(item.tag):'')+'</span>' +
-       '</div>' +
-       '<div class="comment-text">'+esc(item.text)+'</div>' +
-      '</div>' +
-     '</div>';
-    }).join("") + '</div>';
-  }
-
+  var pubHtml = renderPublicCommentsHtml(S.m.n);
   app.innerHTML='<div class="bar"><button class="back" id="bk">返回</button><h2>'+S.m.n+'，選部位</h2></div><div class="grid">'+
    S.m.cuts.map(function(c,i){return '<button class="tile" data-c="'+i+'">'+ico(c.n,c.e)+'<b>'+c.n+'</b><small>'+c.full+'</small></button>'}).join("")+'</div>' + pubHtml;
   
@@ -329,9 +338,11 @@ function resView(){
  '<div class="notes"><label for="nb" id="nl">我的筆記</label><textarea id="nb" rows="4" placeholder="例如：74°C 煮 22 小時，偏軟，下次少 2 小時"></textarea>'+
  '<div class="vis-selector">'+
  '  <label><input type="radio" name="vis" id="vis_pri" value="private" checked> 🔒 僅自己可見（私人）</label>'+
- '  <label><input type="radio" name="vis" id="vis_pub" value="public"> 🌐 公開到分類列表（匿名）</label>'+
+ '  <label><input type="radio" name="vis" id="vis_pub" value="public"> 🌐 公開到社群評論（匿名）</label>'+
  '</div>'+
- '<small id="ns"></small></div></div></div>';
+ '<small id="ns"></small></div></div></div>'+
+ '<div id="pub_comments_container">'+renderPublicCommentsHtml(S.m.n)+'</div>';
+
  app.innerHTML=h;
  document.getElementById("bk").onclick=function(){if(S.from==="book"){S.from=null;go("book")}else go(S.m.cuts.length===1?"meat":"cut")};
  app.querySelectorAll("[data-d]").forEach(function(b){b.onclick=function(){S.di=+b.dataset.d;app.querySelectorAll("[data-d]").forEach(function(x){x.setAttribute("aria-pressed",x===b)});calc()}});
