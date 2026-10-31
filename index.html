@@ -16,10 +16,19 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.6}
 .wrap{position:relative;max-width:960px;margin:0 auto}
 main{padding:28px 18px 48px;min-height:100vh}
-.nbtn{position:absolute;top:26px;right:18px;z-index:2;font:inherit;font-size:14px;cursor:pointer;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px}
-.nbtn:hover{border-color:var(--acc)}
+
+/* 右上角無框三條槓選單 */
+.top-actions{position:absolute;top:24px;right:18px;z-index:10}
+.menu-btn{background:none;border:none;color:var(--ink);font-size:26px;cursor:pointer;padding:4px 8px;line-height:1;transition:opacity .12s}
+.menu-btn:hover{opacity:0.7}
+.menu-dropdown{display:none;position:absolute;top:44px;right:0;width:200px;background:var(--card);border:2px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.08);padding:8px 0;z-index:20}
+.menu-dropdown.show{display:block}
+.menu-item{display:block;width:100%;padding:10px 16px;background:none;border:none;text-align:left;font:inherit;font-size:15px;color:var(--ink);cursor:pointer;text-decoration:none}
+.menu-item:hover{background:var(--plate);color:var(--acc)}
+.menu-divider{height:1px;background:var(--line);margin:6px 0}
+
 h1,h2,.tile b,.big strong,.item b{font-family:var(--fh)}
-h1{font-size:32px;margin:0 0 4px;letter-spacing:.04em;padding-right:120px}
+h1{font-size:32px;margin:0 0 4px;letter-spacing:.04em;padding-right:60px}
 h2{font-size:22px;margin:0;font-weight:400}
 h3{font-family:var(--fh);font-size:17px;font-weight:400;margin:22px 0 10px;color:var(--sub)}
 .lead{color:var(--sub);margin:0 0 22px}
@@ -29,17 +38,13 @@ h3{font-family:var(--fh);font-size:17px;font-weight:400;margin:22px 0 10px;color
 .tile{font:inherit;color:inherit;cursor:pointer;background:var(--card);border:2px solid var(--line);border-radius:22px;padding:18px 10px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .12s,border-color .12s}
 .tile:hover{border-color:var(--acc)}
 .tile:active{transform:scale(.97)}
-.tile:focus-visible,.back:focus-visible,.chip:focus-visible,.nbtn:focus-visible,.go:focus-visible,.x:focus-visible,input:focus-visible{outline:3px solid var(--honey);outline-offset:2px}
 .tile b{font-size:18px;font-weight:400}
 .tile small{color:var(--sub);font-size:12.5px;text-align:center;margin-top:-6px}
-
-/* 讓動物圖示專門使用可愛的 Emoji 字型，其餘文字與數字保持原本風格 */
 .ico, .avatar{font-family:"Noto Color Emoji", sans-serif;}
-
 .ico{width:76px;height:76px;border-radius:50%;background:var(--plate);display:grid;place-items:center;font-size:40px;overflow:hidden;flex:none}
 .ico img{width:100%;height:100%;object-fit:cover}
 .ico.sm{width:52px;height:52px;font-size:28px}
-.bar{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-right:120px;min-height:40px}
+.bar{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-right:60px;min-height:40px}
 .back{font:inherit;cursor:pointer;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px}
 .res{display:grid;gap:4px}
 @media (min-width:820px){.res{grid-template-columns:5fr 6fr;gap:32px;align-items:start}}
@@ -63,7 +68,6 @@ input[type=number]{width:84px;font:inherit;color:var(--ink);background:var(--car
 .warn.hot{border-left-color:var(--acc)}
 .notes{margin-top:18px}
 textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 12px;resize:vertical}
-textarea:focus-visible{outline:3px solid var(--honey);outline-offset:2px}
 .notes small{display:block;margin-top:6px;color:var(--sub);font-size:12.5px}
 .item{display:flex;gap:8px;align-items:center;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:8px 10px;margin-bottom:10px}
 .go{flex:1;min-width:0;display:flex;gap:12px;align-items:center;text-align:left;background:none;border:0;font:inherit;color:inherit;cursor:pointer;padding:2px}
@@ -73,8 +77,6 @@ textarea:focus-visible{outline:3px solid var(--honey);outline-offset:2px}
 .x{font:inherit;font-size:13px;cursor:pointer;border:2px solid var(--line);background:none;color:var(--sub);border-radius:999px;padding:4px 10px;flex:none}
 .x.sure{border-color:var(--acc);color:var(--acc)}
 .empty{color:var(--sub);font-size:14px;margin:0 0 6px}
-
-/* 社群筆記卡片與可視性選擇器樣式 */
 .pub-section{margin-top:28px}
 .comment-card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start}
 .avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:22px;flex:none}
@@ -88,8 +90,34 @@ textarea:focus-visible{outline:3px solid var(--honey);outline-offset:2px}
 </style>
 </head>
 <body>
-<div class="wrap"><button class="nbtn" id="nbtn">📒 筆記本</button><main id="app"></main></div>
+<div class="wrap">
+  <div class="top-actions">
+    <button class="menu-btn" id="menuBtn">☰</button>
+    <div class="menu-dropdown" id="menuDropdown">
+      <button class="menu-item" id="menuNotebook">📒 筆記本</button>
+      <div class="menu-divider"></div>
+      <a href="https://momo-zoet.github.io/obento-helper/" class="menu-item">🍱 便當備餐小幫手</a>
+    </div>
+  </div>
+  <main id="app"></main>
+</div>
+
 <script>
+var menuBtn = document.getElementById("menuBtn");
+var menuDropdown = document.getElementById("menuDropdown");
+menuBtn.onclick = function(e){
+  e.stopPropagation();
+  menuDropdown.classList.toggle("show");
+};
+window.onclick = function(){
+  if(menuDropdown.classList.contains("show")){
+    menuDropdown.classList.remove("show");
+  }
+};
+document.getElementById("menuNotebook").onclick = function(){
+  S.from=null; go("book");
+};
+
 var IMG={
  "牛肉":"","豬肉":"","雞肉":"","鴨肉":"","羊肉":"","魚類":"","蝦貝類":"","軟體類":"","根莖蔬菜":"","蔬菜":"","水果":"","雞蛋":"",
  "牛排":"","牛小排":"","豬里肌":"","豬五花":"","雞胸":"","雞腿":"","鴨胸":"","羊排":"","鮭魚":"","白身魚":"","蝦":"","干貝":"","花枝":"","章魚":"",
@@ -281,10 +309,7 @@ function optLabel(c,di){var o=c.done||c.opts;return o&&o.length>1&&o[di]?o[di][0
 function go(v){S.v=v;render();window.scrollTo(0,0)}
 function pick(c){S.from=null;S.c=c;S.di=c.rec||0;S.t=c.t0||2.5;go("res")}
 
-document.getElementById("nbtn").onclick=function(){S.from=null;go("book")};
-
 function render(){
- document.getElementById("nbtn").style.display=S.v==="book"?"none":"";
  if(S.v==="meat"){
   app.innerHTML='<h1>舒肥計算機</h1><p class="lead">今天想煮什麼？</p><div class="grid">'+
    M.map(function(m,i){return '<button class="tile" data-m="'+i+'">'+ico(m.n,m.e)+'<b>'+m.n+'</b><small>'+m.d+'</small></button>'}).join("")+'</div>';
@@ -383,3 +408,4 @@ render();
 </script>
 </body>
 </html>
+
